@@ -1,849 +1,513 @@
 <!DOCTYPE html>
-<!-- 
-    صفحه به صورت پیش‌فرض فارسی و راست‌چین بارگذاری می‌شود
-    lang="fa" و dir="rtl" به صورت داینامیک توسط جاوااسکریپت تغییر می‌کنند
--->
-<html lang="fa" dir="rtl" data-theme="dark">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAJJAD MOLLAHASHEM - Official Site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TatalMu - 3D Liquid Glass</title>
     
-    <!-- 
-      Google Fonts: 
-      - Vazirmatn (برای فارسی)
-      - Inter (برای انگلیسی)
-    -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Config & Styles -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'ui-sans-serif', 'system-ui'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /*
-        ========================================
-        --- ROOT & THEME VARIABLES ---
-        ========================================
-        */
-        :root {
-            --font-main: 'Vazirmatn', 'Inter', sans-serif;
-            
-            /* --- Dark Mode Colors --- */
-            --color-bg-dark: #000000;
-            --color-text-main-dark: #f0f0f0;
-            --color-text-secondary-dark: #a0a0a0;
-            --color-glass-bg-dark: rgba(0, 0, 0, 0.3);
-            --color-glass-border-dark: rgba(176, 141, 43, 0.3);
-            --color-button-bg-dark: #0a0a0a;
-            --color-button-hover-dark: #1a1a1a;
-            --color-logo-bg-dark: rgba(10, 10, 10, 0.5);
-            --color-icon-dark: #e0e0e0;
-            
-            /* --- Universal Colors --- */
-            --color-gold: #f0b90b;
-            --color-gold-deep: #b08d2b;
-            --color-gold-glow: rgba(240, 185, 11, 0.5);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;700;900&display=swap');
         
-        /* Apply themes */
-        html {
-            --color-bg: var(--color-bg-dark);
-            --color-text-main: var(--color-text-main-dark);
-            --color-text-secondary: var(--color-text-secondary-dark);
-            --color-glass-bg: var(--color-glass-bg-dark);
-            --color-glass-border: var(--color-glass-border-dark);
-            --color-button-bg: var(--color-button-bg-dark);
-            --color-button-hover: var(--color-button-hover-dark);
-            --color-logo-bg: var(--color-logo-bg-dark);
-            --color-icon: var(--color-icon-dark);
-            --color-gold-accent: var(--color-gold);
-        }
-        
-        /*
-        ========================================
-        --- BASE & RESET STYLES ---
-        ========================================
-        */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: var(--font-main);
-            background-color: var(--color-bg);
-            color: var(--color-text-main);
-            transition: background 0.5s ease, color 0.5s ease;
+            font-family: 'Vazirmatn', sans-serif;
             overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        /*
-        ========================================
-        --- CSS-ONLY BACKGROUND ANIMATIONS ---
-        ========================================
-        */
-        
-        /* Animated Gradient Halo */
-        @keyframes halo-bg-anim {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(-45deg, #000000, #11100e, #000000, #1c1a16);
-            background-size: 400% 400%;
-            animation: halo-bg-anim 25s ease infinite;
-            z-index: -2;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Animated Starfield */
-        @keyframes move-stars-1 { 0% {transform: translateY(0);} 100% {transform: translateY(-100vh);} }
-        @keyframes move-stars-2 { 0% {transform: translateY(0);} 100% {transform: translateY(-100vh);} }
-        
-        .stars {
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .liquid-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1;
-            opacity: 1;
-        }
-        
-        .stars-1 { height: 200vh; animation: move-stars-1 50s linear infinite; box-shadow: 5vw 10vh 0 0px var(--color-gold-glow), 15vw 30vh 0 0px var(--color-gold-glow), 25vw 50vh 0 0px var(--color-gold-glow), 35vw 70vh 0 0px var(--color-gold-glow), 45vw 90vh 0 0px var(--color-gold-glow), 55vw 20vh 0 0px var(--color-gold-glow), 65vw 40vh 0 0px var(--color-gold-glow), 75vw 60vh 0 0px var(--color-gold-glow), 85vw 80vh 0 0px var(--color-gold-glow), 95vw 100vh 0 0px var(--color-gold-glow), 5vw 110vh 0 0px var(--color-gold-glow), 15vw 130vh 0 0px var(--color-gold-glow), 25vw 150vh 0 0px var(--color-gold-glow), 35vw 170vh 0 0px var(--color-gold-glow), 45vw 190vh 0 0px var(--color-gold-glow), 55vw 120vh 0 0px var(--color-gold-glow), 65vw 140vh 0 0px var(--color-gold-glow), 75vw 160vh 0 0px var(--color-gold-glow), 85vw 180vh 0 0px var(--color-gold-glow), 95vw 200vh 0 0px var(--color-gold-glow); }
-        .stars-2 { height: 200vh; animation: move-stars-2 100s linear infinite; box-shadow: 10vw 5vh 0 1px var(--color-gold), 30vw 25vh 0 1px var(--color-gold), 50vw 45vh 0 1px var(--color-gold), 70vw 65vh 0 1px var(--color-gold), 90vw 85vh 0 1px var(--color-gold), 10vw 105vh 0 1px var(--color-gold), 30vw 125vh 0 1px var(--color-gold), 50vw 145vh 0 1px var(--color-gold), 70vw 165vh 0 1px var(--color-gold), 90vw 185vh 0 1px var(--color-gold); }
-        
-        /*
-        ========================================
-        --- HEADER & NAVIGATION STYLES ---
-        ========================================
-        */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1rem 1.5rem;
-            z-index: 50;
-            background: var(--color-glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-glass-border);
-            transition: background 0.5s ease, border-color 0.5s ease;
-        }
-        
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .header-title {
-            font-size: 1.25rem;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Animated Gold Text */
-        @keyframes button-gradient-anim {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .animated-gold-text {
-            background: linear-gradient(90deg, var(--color-gold-deep), var(--color-gold), var(--color-gold-deep));
-            background-size: 200% 200%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: button-gradient-anim 5s ease infinite;
-            text-shadow: 0 0 10px var(--color-gold-glow);
-            font-weight: 800; /* BOLD */
-        }
-        
-        /* Header Controls (Menu + Lang) */
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem; /* 12px */
-        }
-
-        /* Styles for header buttons (Menu, Lang) */
-        .icon-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--color-icon);
-            transition: color 0.3s ease, transform 0.3s ease;
-            padding: 0;
-        }
-        
-        .icon-button:hover {
-            color: var(--color-gold-accent);
-            transform: scale(1.1);
-        }
-        
-        .icon-button svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            stroke-width: 2;
-            display: block;
-        }
-
-        /* Language Toggle Button Style */
-        .lang-toggle {
-            font-family: var(--font-main);
-            font-weight: 700;
-            font-size: 0.875rem; /* 14px */
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--color-glass-border);
-        }
-        .lang-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        /*
-        ========================================
-        --- MOBILE MENU STYLES (RTL/LTR) ---
-        ========================================
-        */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            height: 100%;
-            width: 260px;
-            z-index: 60;
-            background: var(--color-glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            transition: transform 0.3s ease-in-out, background 0.5s ease, border-color 0.5s ease;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* RTL (default) */
-        html[dir="rtl"] .mobile-menu { right: 0; transform: translateX(100%); border-left: 1px solid var(--color-glass-border); }
-        html[dir="rtl"] .mobile-menu.is-open { transform: translateX(0); }
-        html[dir="rtl"] .mobile-menu-close-btn { align-self: flex-start; /* Top-left in RTL */ }
-
-        /* LTR */
-        html[dir="ltr"] .mobile-menu { left: 0; transform: translateX(-100%); border-right: 1px solid var(--color-glass-border); }
-        html[dir="ltr"] .mobile-menu.is-open { transform: translateX(0); }
-        html[dir="ltr"] .mobile-menu-close-btn { align-self: flex-end; /* Top-right in LTR */ }
-        
-        .mobile-menu-nav {
-            margin-top: 2rem;
-        }
-        
-        .menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 55;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        
-        .menu-overlay.is-open {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /*
-        ========================================
-        --- MAIN CONTENT & LAYOUT ---
-        ========================================
-        */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 8rem 1.5rem 8rem; /* Padding for header/footer */
-            text-align: center;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            width: 100%;
-            max-width: 440px; /* 352px */
-        }
-        
-        /*
-        ========================================
-        --- LOGO STYLES ---
-        ========================================
-        */
-        @keyframes float-anim {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        
-        .logo-container {
-            width: 9rem;  /* 144px */
-            height: 9rem; /* 144px */
-            border-radius: 50%;
-            background: var(--color-logo-bg);
-            border: 4px solid var(--color-gold-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 25px var(--color-gold-glow), 0 0 40px rgba(0,0,0,0.3);
-            animation: float-anim 6s ease-in-out infinite;
-            transition: background 0.5s ease, border-color 0.5s ease;
-            overflow: hidden; /* To clip the image */
-        }
-        
-        .logo-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        @media (min-width: 768px) {
-            .logo-container {
-                width: 11rem;  /* 176px */
-                height: 11rem; /* 176px */
-            }
-        }
-        
-        /*
-        ========================================
-        --- TEXT & BUTTON STYLES ---
-        ========================================
-        */
-        .site-title {
-            font-size: 2rem; /* 32px */
-            font-weight: 800;
-            letter-spacing: 0.02em;
-            color: var(--color-text-main);
-            transition: color 0.5s ease;
-        }
-        
-        .site-tagline {
-            font-size: 1.125rem; /* 18px */
-            color: var(--color-text-secondary);
-            margin-top: -1rem; /* Pull closer to title */
-            transition: color 0.5s ease;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-        
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            width: 100%;
-            padding-top: 1rem;
-        }
-        
-        /* --- Luxury Button Styling --- */
-        .luxury-button {
-            position: relative;
-            display: block;
-            width: 100%;
-            text-decoration: none;
-            border-radius: 0.75rem; /* 12px */
-            padding: 3px; /* Padding for the gradient border */
-            z-index: 1;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: none; /* Reset for button element */
-            border: none; /* Reset for button element */
-            cursor: pointer; /* For button element */
-            font-family: inherit; /* For button element */
-        }
-        
-        .luxury-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, var(--color-gold-deep), var(--color-gold), var(--color-gold-deep));
-            background-size: 200% 200%;
-            animation: button-gradient-anim 8s ease infinite;
-            z-index: -1;
-            border-radius: inherit;
-            transition: opacity 0.3s ease;
-        }
-        
-        .luxury-button-inner {
-            background-color: var(--color-button-bg);
-            padding: 1rem 2rem;
-            border-radius: 0.5rem; /* 8px (slightly smaller than parent) */
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-        
-        .luxury-button-text {
-            font-size: 1.125rem; /* 18px */
-            font-weight: 600;
-            color: var(--color-text-main);
-            transition: color 0.5s ease;
-        }
-        
-        /* Button Hover Effect */
-        .luxury-button:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 20px var(--color-gold-glow);
-        }
-        
-        .luxury-button:hover .luxury-button-inner {
-            background-color: var(--color-button-hover);
         }
 
-        @media (min-width: 768px) {
-            .site-title {
-                font-size: 2.25rem; /* 36px */
-            }
-        }
+        .dark .liquid-shape { filter: blur(60px); opacity: 0.6; }
+        .light .liquid-shape { filter: blur(80px); opacity: 0.5; }
+
+        /* 3D Transform Utilities */
+        .preserve-3d { transform-style: preserve-3d; }
+        .perspective-1000 { perspective: 1000px; }
+        .backface-hidden { backface-visibility: hidden; }
         
-        /*
-        ========================================
-        --- FOOTER STYLES ---
-        ========================================
-        */
-        .site-footer {
-            position: relative; /* Changed from fixed to flow naturally */
-            width: 100%;
-            padding: 1.5rem;
-            z-index: 10;
-            background: var(--color-glass-bg);
-            border-top: 1px solid var(--color-glass-border);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            text-align: center;
-            margin-top: auto; /* Pushes footer to bottom */
-            transition: background 0.5s ease, border-color 0.5s ease;
+        .card-hover-effect {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        .footer-text {
-            font-size: 0.875rem; /* 14px */
-            color: var(--color-text-secondary);
-            transition: color 0.5s ease;
+        .card-hover-effect:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-
-        /*
-        ========================================
-        --- CONTENT MODAL (POP-UP) STYLES ---
-        ========================================
-        */
-        .modal-overlay-container {
-            position: fixed;
-            inset: 0;
-            z-index: 70;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .modal-overlay-container.is-open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: var(--color-glass-bg);
-            border: 1px solid var(--color-glass-border);
-            border-radius: 0.75rem; /* 12px */
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay-container.is-open .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--color-glass-border);
-        }
-
-        .modal-title-text {
-            font-size: 1.25rem; /* 20px */
-            font-weight: 700;
-            color: var(--color-text-main);
-        }
-
-        .modal-body-content {
-            padding: 1.5rem;
-            min-height: 200px; /* Placeholder height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        
-        /*
-        ========================================
-        --- ENTRANCE ANIMATIONS ---
-        ========================================
-        */
-        @keyframes fade-in-anim { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slide-up-anim { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-
-        .animate-fade-in {
-            animation: fade-in-anim 1s ease-out forwards;
-        }
-        
-        .animate-slide-up {
-            opacity: 0; /* Start hidden */
-            animation: slide-up-anim 0.8s ease-out forwards;
-        }
-        
-        /* Staggered delays */
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-        .delay-4 { animation-delay: 0.8s; }
-        .delay-5 { animation-delay: 1.0s; }
-
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-purple-500 selection:text-white transition-colors duration-500">
+    <div id="root"></div>
 
-    <!-- CSS-Only Animated Starfield -->
-    <div class="stars stars-1"></div>
-    <div class="stars stars-2"></div>
-    
-    <!-- ===== Header ===== -->
-    <header class="site-header animate-fade-in">
-        <div class="header-container">
-            
-            <!-- Site Name (Left side in RTL, Right in LTR) -->
-            <div class="header-title animated-gold-text">
-                Mollahashem
-            </div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-            <!-- Header Controls (Right side in RTL, Left in LTR) -->
-            <div class="header-controls">
-                <button id="lang-toggle-btn" class="icon-button lang-toggle" aria-label="Toggle language">
-                    EN
-                </button>
-                <button id="menu-open-btn" class="icon-button" aria-label="Open menu">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-            </div>
-            
-        </div>
-    </header>
+        // --- Icon Components (Simple SVG Wrappers for direct usage) ---
+        const Icon = ({ name, size = 24, className }) => {
+            useEffect(() => {
+                lucide.createIcons();
+            }, [name]);
+            return <i data-lucide={name} width={size} height={size} className={className}></i>;
+        };
 
-    <!-- ===== Mobile Menu (Hamburger) ===== -->
-    <div id="mobile-menu" class="mobile-menu">
-        <!-- Close Button -->
-        <button id="menu-close-btn" class="icon-button mobile-menu-close-btn" aria-label="Close menu">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-        
-        <!-- Menu Links -->
-        <nav class="mobile-menu-nav">
-            <div class="button-container">
+        const App = () => {
+            // State
+            const [loading, setLoading] = useState(true);
+            const [showPopup, setShowPopup] = useState(false);
+            const [captchaVerified, setCaptchaVerified] = useState(false);
+            const [captchaStep, setCaptchaStep] = useState('idle');
+            const [theme, setTheme] = useState('dark');
+            const [activeTab, setActiveTab] = useState('home');
+            const [songs, setSongs] = useState([]);
+            const [user, setUser] = useState({
+                name: 'کاربر بدون نام!',
+                avatar: null,
+                savedIds: [],
+                likedIds: []
+            });
+            const [isEditingName, setIsEditingName] = useState(false);
+            const [tempName, setTempName] = useState('');
+
+            // Theme Management
+            useEffect(() => {
+                document.documentElement.className = theme;
+                document.body.style.backgroundColor = theme === 'dark' ? '#050505' : '#f8f9fa';
+            }, [theme]);
+
+            // Data Generation
+            useEffect(() => {
+                const gradients = [
+                    'from-purple-600 to-blue-600',
+                    'from-rose-500 to-orange-500',
+                    'from-emerald-500 to-teal-500',
+                    'from-amber-400 to-orange-600',
+                    'from-pink-500 to-rose-500'
+                ];
                 
-                <!-- NEW: Audio Gallery -->
-                <button class="luxury-button menu-content-btn" data-modal="modal-audio">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="menu-audio">گالری صوت</span>
+                const generated = Array.from({ length: 140 }, (_, i) => ({
+                    id: i + 1,
+                    title: `موزیک شماره ${i + 1}`,
+                    artist: 'امیر تتلو',
+                    album: i % 3 === 0 ? '78' : (i % 3 === 1 ? 'Cosmos' : 'Sahm'),
+                    gradient: gradients[i % gradients.length],
+                    duration: '3:20'
+                }));
+                setSongs(generated);
+                setTempName(user.name);
+
+                // Initial Load Timer
+                setTimeout(() => {
+                    setLoading(false);
+                    setShowPopup(true);
+                }, 3000);
+            }, []);
+
+            // Re-render icons when DOM updates
+            useEffect(() => {
+                lucide.createIcons();
+            });
+
+            // Handlers
+            const toggleLike = (id) => {
+                setUser(prev => ({
+                    ...prev,
+                    likedIds: prev.likedIds.includes(id) 
+                        ? prev.likedIds.filter(i => i !== id) 
+                        : [...prev.likedIds, id]
+                }));
+            };
+            const toggleSave = (id) => {
+                setUser(prev => ({
+                    ...prev,
+                    savedIds: prev.savedIds.includes(id) 
+                        ? prev.savedIds.filter(i => i !== id) 
+                        : [...prev.savedIds, id]
+                }));
+            };
+
+            // --- Components ---
+
+            const LiquidBackground = () => (
+                <div className="liquid-bg fixed inset-0 pointer-events-none overflow-hidden">
+                    {/* Dark Mode Blobs */}
+                    {theme === 'dark' ? (
+                        <>
+                            <div className="liquid-shape absolute top-0 -left-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply opacity-70 animate-blob"></div>
+                            <div className="liquid-shape absolute top-0 -right-4 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-2000"></div>
+                            <div className="liquid-shape absolute -bottom-8 left-20 w-72 h-72 bg-pink-600 rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-4000"></div>
+                        </>
+                    ) : (
+                        /* Light Mode Blobs (Anari/Klbasi) */
+                        <>
+                            <div className="liquid-shape absolute top-10 left-10 w-96 h-96 bg-rose-300 rounded-full mix-blend-multiply opacity-60 animate-blob"></div>
+                            <div className="liquid-shape absolute top-20 right-10 w-80 h-80 bg-orange-300 rounded-full mix-blend-multiply opacity-60 animate-blob animation-delay-2000"></div>
+                            <div className="liquid-shape absolute bottom-10 left-1/3 w-80 h-80 bg-red-300 rounded-full mix-blend-multiply opacity-60 animate-blob animation-delay-4000"></div>
+                        </>
+                    )}
+                </div>
+            );
+
+            const LoadingScreen = () => (
+                <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
+                    <LiquidBackground />
+                    <div className="relative z-10 flex flex-col items-center">
+                        <div className="w-32 h-32 rounded-full border-4 border-white/10 glass-panel flex items-center justify-center animate-spin-slow mb-8 relative shadow-[0_0_50px_rgba(168,85,247,0.5)]">
+                            <div className="absolute inset-2 rounded-full border border-white/20"></div>
+                            <Icon name="music" size={48} className="text-white animate-pulse" />
+                        </div>
+                        <h1 className="text-4xl font-black tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 animate-pulse">
+                            TATALMU
+                        </h1>
+                        <div className="mt-8 w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 w-full animate-[blob_2s_infinite]"></div>
+                        </div>
                     </div>
-                </button>
-                
-                <!-- NEW: Video Gallery -->
-                <button class="luxury-button menu-content-btn" data-modal="modal-video">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="menu-video">گالری ویدئو</span>
+                </div>
+            );
+
+            const Popup = () => {
+                if (!showPopup) return null;
+                return (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm perspective-1000">
+                        <div className="relative w-full max-w-sm glass-panel p-8 rounded-3xl animate-[float_4s_ease-in-out_infinite] transform transition-all">
+                            <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 text-white/50 hover:text-white">
+                                <Icon name="x" size={24} />
+                            </button>
+                            <div className="text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12">
+                                    <Icon name="bell" className="text-white" />
+                                </div>
+                                <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>اطلاعیه مهم</h3>
+                                <p className={`text-sm mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>برای دریافت آخرین اخبار و آپدیت‌ها در کانال تلگرام ما عضو شوید.</p>
+                                <a href="https://t.me/tatalmucni18" target="_blank" className="block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105">
+                                    عضویت در کانال
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </button>
-                
-                <!-- NEW: Events -->
-                <button class="luxury-button menu-content-btn" data-modal="modal-events">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="menu-events">اعلام مراسم</span>
+                )
+            };
+
+            const Captcha = () => {
+                if (captchaVerified) return null;
+                const verify = () => {
+                    setCaptchaStep('loading');
+                    setTimeout(() => {
+                        setCaptchaStep('verified');
+                        setTimeout(() => setCaptchaVerified(true), 1000);
+                    }, 1500);
+                };
+
+                return (
+                    <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${theme === 'dark' ? 'bg-black' : 'bg-gray-100'}`}>
+                        <LiquidBackground />
+                        <div className="glass-panel p-10 rounded-[2.5rem] flex flex-col items-center max-w-sm w-full relative z-10 border border-white/20 shadow-2xl">
+                             <h2 className={`text-xl font-bold mb-8 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>تایید هویت 3D</h2>
+                             <button onClick={verify} disabled={captchaStep !== 'idle'} className="relative group perspective-1000 w-40 h-40 outline-none">
+                                <div className={`w-full h-full relative transition-all duration-700 transform-style-3d ${captchaStep === 'idle' ? 'rotate-x-12 rotate-y-12 group-hover:rotate-0' : ''} ${captchaStep === 'verified' ? 'rotate-0' : ''}`}>
+                                    <div className={`absolute inset-0 rounded-3xl flex items-center justify-center border-4 ${captchaStep === 'verified' ? 'border-green-500 bg-green-500/20' : 'border-purple-500 bg-gray-800'} backdrop-blur-xl shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-colors duration-300`}>
+                                        {captchaStep === 'idle' && <span className="text-white text-xs font-bold">من ربات نیستم</span>}
+                                        {captchaStep === 'loading' && <Icon name="loader-2" className="text-purple-500 animate-spin" size={40} />}
+                                        {captchaStep === 'verified' && <Icon name="check" className="text-green-500" size={60} />}
+                                    </div>
+                                </div>
+                             </button>
+                             <p className="mt-8 text-[10px] uppercase tracking-widest opacity-50 text-center">Powered by CNI Security</p>
+                        </div>
                     </div>
-                </button>
-                
-                <!-- NEW: About -->
-                <button class="luxury-button menu-content-btn" data-modal="modal-about">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="menu-about">درباره</span>
+                )
+            };
+
+            // --- Main App Components ---
+
+            const Header = () => (
+                <header className="fixed top-0 left-0 right-0 h-20 z-40 px-6 flex items-center justify-between glass-panel border-b-0 rounded-b-3xl">
+                    <button onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <Icon name={theme === 'dark' ? 'moon' : 'sun'} className={theme === 'dark' ? 'text-purple-400' : 'text-orange-500'} size={20} />
+                    </button>
+                    <div className="text-2xl font-black italic tracking-tighter">
+                        <span className={theme === 'dark' ? 'text-white' : 'text-rose-600'}>TATAL</span>
+                        <span className={theme === 'dark' ? 'text-purple-500' : 'text-orange-500'}>MU</span>
                     </div>
-                </button>
+                    <div className="px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-blue-400 text-white text-xs font-bold shadow-lg">CNI</div>
+                </header>
+            );
 
-                <!-- Sponsor Button -->
-                <a href="https://t.me/sponsoracb" target="_blank" rel="noopener noreferrer" class="luxury-button">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="menu-ads">تبلیغات</span>
+            const MusicCard = ({ song }) => (
+                <div className="group relative h-64 rounded-3xl overflow-hidden glass-panel border-0 card-hover-effect">
+                    <div className={`h-3/5 w-full bg-gradient-to-br ${song.gradient} relative p-4 flex flex-col justify-between`}>
+                        <div className="absolute inset-0 bg-black/10"></div>
+                        <div className="self-end p-2 rounded-xl bg-black/20 backdrop-blur-md">
+                            <Icon name="music" size={16} className="text-white" />
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 backdrop-blur-[2px]">
+                             <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-0 group-hover:scale-110 transition-transform duration-300">
+                                <Icon name="play" className="text-black ml-1" fill="black" />
+                             </button>
+                        </div>
                     </div>
-                </a>
-            </div>
-        </nav>
-    </div>
-    <!-- Menu Overlay -->
-    <div id="menu-overlay" class="menu-overlay"></div>
-
-
-    <!-- ===== Main Content ===== -->
-    <main class="main-content">
-        <div class="content-wrapper">
-            
-            <!-- Logo -->
-            <div class="logo-container animate-slide-up delay-1">
-                <!-- User's Image -->
-                <a href="https://uupload.ir/" target="_blank">
-                    <img src="https://s6.uupload.ir/files/img_20251026_012130_450_z73v.jpg" border="0" alt="آپلود عکس" class="logo-image" />
-                </a>
-            </div>
-            
-            <!-- Site Name -->
-            <h1 class="site-title animate-slide-up delay-2">
-                SAJJAD MOLLAHASHEM
-            </h1>
-            
-            <!-- Tagline -->
-            <p class="site-tagline animate-slide-up delay-3" data-lang="site-tagline">
-                تمام لینک‌ها
-            </p>
-
-            <!-- Social Links Buttons -->
-            <div class="button-container animate-slide-up delay-4">
-                
-                <!-- Button: Telegram -->
-                <a href="https://t.me/sajjabmollahashem" target="_blank" rel="noopener noreferrer" class="luxury-button">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="btn-telegram">کانال تلگرام</span>
+                    <div className={`h-2/5 p-4 flex flex-col justify-between ${theme === 'dark' ? 'bg-black/40' : 'bg-white/60'}`}>
+                        <div>
+                            <h4 className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{song.title}</h4>
+                            <p className="text-[10px] opacity-60 mt-1">{song.artist}</p>
+                        </div>
+                        <div className="flex justify-between items-center mt-2">
+                             <div className="flex gap-2">
+                                <button onClick={() => toggleLike(song.id)} className={`transition-transform active:scale-90 ${user.likedIds.includes(song.id) ? 'text-red-500' : 'text-gray-400 hover:text-white'}`}>
+                                    <Icon name="heart" size={18} className={user.likedIds.includes(song.id) ? "fill-current" : ""} />
+                                </button>
+                                <button onClick={() => toggleSave(song.id)} className={`transition-transform active:scale-90 ${user.savedIds.includes(song.id) ? 'text-blue-500' : 'text-gray-400 hover:text-white'}`}>
+                                    <Icon name="download" size={18} />
+                                </button>
+                             </div>
+                             <span className="text-[10px] opacity-30 font-mono">#{song.id}</span>
+                        </div>
                     </div>
-                </a>
+                </div>
+            );
 
-                <!-- Button: Aparat -->
-                <a href="https://www.aparat.com/Sajadmolahashem" target="_blank" rel="noopener noreferrer" class="luxury-button" style="animation-delay: 0.9s;">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="btn-aparat">چنل آپارات</span>
+            const Views = {
+                home: () => (
+                    <div className="space-y-8 pb-32 animate-fade-in">
+                        <div className="text-center py-10 relative">
+                            <h2 className={`text-4xl md:text-5xl font-black mb-4 drop-shadow-xl ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                                آرشیو کامل <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">امیر تتلو</span>
+                            </h2>
+                            <div className={`flex justify-center gap-4 text-xs font-bold tracking-widest opacity-70 ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>
+                                <span className="px-3 py-1 rounded-full border border-current">+200 آهنگ</span>
+                                <span className="px-3 py-1 rounded-full border border-current">+16 آلبوم</span>
+                            </div>
+                        </div>
+
+                        <div className="px-4">
+                            <div className="flex items-center gap-2 mb-4 px-2">
+                                <Icon name="disc" className={theme === 'dark' ? 'text-purple-400' : 'text-orange-500'} />
+                                <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>آلبوم‌های ویژه</h3>
+                            </div>
+                            <div className="flex overflow-x-auto gap-4 pb-4 px-2 no-scrollbar" style={{scrollbarWidth: 'none'}}>
+                                {['Sheytan', 'Sahm', 'YinYang', 'Jahanam', '78', 'Kosmos', 'Boht'].map((alb, i) => (
+                                    <a href="https://t.me/tatalmucni18" target="_blank" key={i} className="min-w-[8rem] h-32 rounded-2xl glass-panel flex flex-col items-center justify-center group hover:bg-white/10 transition-colors">
+                                        <Icon name="disc" size={32} className={`mb-2 transition-transform duration-700 group-hover:rotate-180 ${theme === 'dark' ? 'text-purple-400' : 'text-orange-500'}`} />
+                                        <span className={`font-bold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{alb}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="px-4">
+                            <h3 className={`text-lg font-bold mb-4 px-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>آهنگ‌های جدید</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {songs.map(song => <MusicCard key={song.id} song={song} />)}
+                            </div>
+                        </div>
+
+                        <div className="px-4 mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            {['راهنما', 'درباره ما', 'ارتباط با ما'].map((item, i) => (
+                                <div key={i} className="glass-panel p-6 rounded-2xl">
+                                    <h4 className={`font-bold mb-2 ${theme === 'dark' ? 'text-purple-400' : 'text-rose-600'}`}>{item}</h4>
+                                    {item === 'ارتباط با ما' ? (
+                                        <div className="flex justify-center gap-2 mt-4">
+                                            <a href="#" className="px-3 py-1 rounded bg-red-500/20 text-red-500 text-xs">YouTube</a>
+                                            <a href="https://t.me/tatalooorginal" className="px-3 py-1 rounded bg-blue-500/20 text-blue-500 text-xs">Telegram</a>
+                                        </div>
+                                    ) : <p className="text-xs opacity-50">لورم ایپسوم متن ساختگی</p>}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="text-center text-[10px] opacity-30 font-mono pb-8">Powered by CNI & AMT-IR</div>
                     </div>
-                </a>
-
-                <!-- Button: Instagram -->
-                <a href="https://www.instagram.com/sajjad._.mlahashem?igsh=YTd3a2w3cWtoc3c3" target="_blank" rel="noopener noreferrer" class="luxury-button" style="animation-delay: 1.0s;">
-                    <div class="luxury-button-inner">
-                        <span class="luxury-button-text" data-lang="btn-instagram">پیج اینستاگرام</span>
+                ),
+                profile: () => (
+                    <div className="px-4 py-8 pb-32 max-w-lg mx-auto">
+                        <div className="glass-panel p-8 rounded-[2rem] flex flex-col items-center mb-6 relative overflow-hidden shadow-2xl">
+                            <div className="absolute top-0 w-full h-24 bg-gradient-to-b from-purple-500/30 to-transparent"></div>
+                            <div className="relative w-28 h-28 rounded-full border-4 border-white/20 bg-gray-800 flex items-center justify-center mb-4 overflow-hidden group">
+                                {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <Icon name="user" size={48} className="text-gray-500" />}
+                                <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                    <Icon name="edit-2" className="text-white" />
+                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => {
+                                        if(e.target.files[0]) setUser({...user, avatar: URL.createObjectURL(e.target.files[0])})
+                                    }} />
+                                </label>
+                            </div>
+                            <div className="flex items-center gap-2 relative z-10">
+                                {isEditingName ? (
+                                    <div className="flex items-center gap-2 bg-black/20 p-2 rounded-lg">
+                                        <input value={tempName} onChange={e=>setTempName(e.target.value)} className="bg-transparent text-center outline-none border-b border-white/30 w-32 text-white" autoFocus />
+                                        <button onClick={()=>{setUser({...user, name: tempName}); setIsEditingName(false)}}><Icon name="check" className="text-green-500" /></button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{user.name}</h2>
+                                        <button onClick={()=>setIsEditingName(true)} className="opacity-50 hover:opacity-100"><Icon name="edit-2" size={16} /></button>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            {[
+                                {icon: 'heart', color: 'text-red-500', bg: 'bg-red-500/10', text: 'مورد علاقه', count: user.likedIds.length},
+                                {icon: 'download', color: 'text-blue-500', bg: 'bg-blue-500/10', text: 'ذخیره شده', count: user.savedIds.length},
+                                {icon: 'ticket', color: 'text-yellow-500', bg: 'bg-yellow-500/10', text: 'تیکت‌ها', count: 0},
+                            ].map((item, i) => (
+                                <div key={i} className="glass-panel p-4 rounded-xl flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-lg ${item.bg} ${item.color}`}><Icon name={item.icon} size={20} /></div>
+                                        <span className={`font-medium ${theme==='dark'?'text-white':'text-gray-800'}`}>{item.text}</span>
+                                    </div>
+                                    <span className="font-bold opacity-70">{item.count}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </a>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- ===== Footer ===== -->
-    <footer class="site-footer animate-fade-in">
-        <p class="footer-text" data-lang="footer-text">
-            تمامی حقوق نزد سازمان AMT-IR محفوظ است
-        </p>
-    </footer>
-
-    <!-- 
-    ========================================
-    --- NEW: CONTENT MODAL (POP-UP) ---
-    ========================================
-    -->
-    <div id="content-modal" class="modal-overlay-container">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h3 id="modal-title" class="modal-title-text" data-lang="">
-                    <!-- Title is set by JS -->
-                </h3>
-                <button id="modal-close-btn" class="icon-button" aria-label="Close modal">
-                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <!-- Modal Body -->
-            <div id="modal-body" class="modal-body-content">
-                <p data-lang="modal-placeholder">محتوا به زودی در این بخش قرار خواهد گرفت.</p>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- JavaScript for interactivity -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Translations Object ---
-            const translations = {
-                fa: {
-                    // Menu
-                    "menu-audio": "گالری صوت",
-                    "menu-video": "گالری ویدئو",
-                    "menu-events": "اعلام مراسم",
-                    "menu-about": "درباره",
-                    "menu-ads": "تبلیغات",
-                    // Main Page
-                    "site-tagline": "تمام لینک‌ها",
-                    "btn-telegram": "کانال تلگرام",
-                    "btn-aparat": "چنل آپارات",
-                    "btn-instagram": "پیج اینستاگرام",
-                    // Footer
-                    "footer-text": "تمامی حقوق نزد سازمان AMT-IR محفوظ است",
-                    // Modal
-                    "modal-placeholder": "محتوا به زودی در این بخش قرار خواهد گرفت."
-                },
-                en: {
-                    // Menu
-                    "menu-audio": "Audio Gallery",
-                    "menu-video": "Video Gallery",
-                    "menu-events": "Events",
-                    "menu-about": "About",
-                    "menu-ads": "Sponsor",
-                    // Main Page
-                    "site-tagline": "All Links",
-                    "btn-telegram": "Telegram Channel",
-                    "btn-aparat": "Aparat Channel",
-                    "btn-instagram": "Instagram Page",
-                    // Footer
-                    "footer-text": "All rights reserved for AMT-IR Organization",
-                    // Modal
-                    "modal-placeholder": "Content will be available in this section soon."
+                ),
+                support: () => (
+                    <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+                        <div className="glass-panel p-8 rounded-3xl text-center max-w-sm w-full">
+                            <div className="w-20 h-20 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-500 animate-pulse">
+                                <Icon name="life-buoy" size={40} />
+                            </div>
+                            <h2 className={`text-xl font-bold mb-2 ${theme==='dark'?'text-white':'text-gray-800'}`}>پشتیبانی آنلاین</h2>
+                            <p className="text-sm opacity-60 mb-6">برای ارتباط با ما در تلگرام پیام دهید</p>
+                            <a href="https://t.me/CNICOD" className="flex items-center justify-between p-3 rounded-xl bg-blue-600/10 border border-blue-500/30">
+                                <span className="font-mono font-bold text-blue-500">@CNICOD</span>
+                                <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-lg">پیام</span>
+                            </a>
+                        </div>
+                    </div>
+                ),
+                list: ({ type }) => {
+                    const ids = type === 'liked' ? user.likedIds : user.savedIds;
+                    const list = songs.filter(s => ids.includes(s.id));
+                    return (
+                        <div className="px-4 py-8 pb-32 min-h-screen">
+                             <h2 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${theme==='dark'?'text-white':'text-gray-800'}`}>
+                                <Icon name={type==='liked'?'heart':'download'} className={type==='liked'?'text-red-500':'text-blue-500'} />
+                                {type==='liked'?'مورد علاقه‌ها':'ذخیره شده‌ها'}
+                             </h2>
+                             {list.length > 0 ? (
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    {list.map(s => <MusicCard key={s.id} song={s} />)}
+                                </div>
+                             ) : (
+                                <div className="flex flex-col items-center justify-center h-64 opacity-30">
+                                    <Icon name="music" size={60} className="mb-4" />
+                                    <p>لیست خالی است</p>
+                                </div>
+                             )}
+                        </div>
+                    )
                 }
             };
 
-            // --- Mobile Menu ---
-            const openBtn = document.getElementById('menu-open-btn');
-            const closeBtn = document.getElementById('menu-close-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuOverlay = document.getElementById('menu-overlay');
+            if (loading) return <LoadingScreen />;
 
-            function openMenu() {
-                mobileMenu.classList.add('is-open');
-                menuOverlay.classList.add('is-open');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            }
+            return (
+                <div className={`min-h-screen relative`}>
+                    <LiquidBackground />
+                    
+                    <Popup />
+                    <Captcha />
+                    
+                    {captchaVerified && (
+                        <>
+                            <Header />
+                            <main className="pt-24 animate-fade-in">
+                                {activeTab === 'home' && <Views.home />}
+                                {activeTab === 'profile' && <Views.profile />}
+                                {activeTab === 'support' && <Views.support />}
+                                {activeTab === 'favorites' && <Views.list type="liked" />}
+                                {activeTab === 'saved' && <Views.list type="saved" />}
+                            </main>
 
-            function closeMenu() {
-                mobileMenu.classList.remove('is-open');
-                menuOverlay.classList.remove('is-open');
-                document.body.style.overflow = ''; // Re-enable scrolling
-            }
+                            <nav className="fixed bottom-6 left-4 right-4 h-20 glass-panel rounded-[2rem] flex justify-around items-center px-2 shadow-2xl z-50">
+                                {[
+                                    {id: 'favorites', icon: 'heart'},
+                                    {id: 'saved', icon: 'download'},
+                                    {id: 'home', icon: 'home', main: true},
+                                    {id: 'support', icon: 'life-buoy'},
+                                    {id: 'profile', icon: 'user'},
+                                ].map(item => {
+                                    const isActive = activeTab === item.id;
+                                    if(item.main) return (
+                                        <button key={item.id} onClick={()=>setActiveTab(item.id)} className={`w-16 h-16 -mt-10 rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:-translate-y-2 ${theme==='dark'?'bg-purple-600 text-white shadow-purple-600/40':'bg-rose-500 text-white shadow-rose-500/40'}`}>
+                                            <Icon name={item.icon} size={28} />
+                                        </button>
+                                    );
+                                    return (
+                                        <button key={item.id} onClick={()=>setActiveTab(item.id)} className={`p-3 rounded-xl transition-all ${isActive ? (theme==='dark'?'bg-white/10 text-purple-400':'bg-black/5 text-rose-500') : 'text-gray-400'}`}>
+                                            <Icon name={item.icon} size={24} className={isActive && item.id!=='home' ? "fill-current" : ""} />
+                                        </button>
+                                    );
+                                })}
+                            </nav>
+                        </>
+                    )}
+                </div>
+            );
+        };
 
-            openBtn.addEventListener('click', openMenu);
-            closeBtn.addEventListener('click', closeMenu);
-            menuOverlay.addEventListener('click', closeMenu);
-
-            // --- Content Modal ---
-            const contentModal = document.getElementById('content-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-            const menuContentBtns = document.querySelectorAll('.menu-content-btn');
-
-            function openContentModal(titleKey) {
-                const lang = document.documentElement.lang;
-                // Set the title text based on current language
-                modalTitle.textContent = translations[lang][titleKey];
-                // Set the data-lang attribute so it can be updated if language changes
-                modalTitle.setAttribute('data-lang', titleKey);
-                
-                contentModal.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-                closeMenu(); // Close the hamburger menu
-            }
-
-            function closeContentModal() {
-                contentModal.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
-
-            menuContentBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Find the data-lang key from the span inside the button
-                    const titleKey = btn.querySelector('.luxury-button-text').getAttribute('data-lang');
-                    openContentModal(titleKey);
-                });
-            });
-
-            modalCloseBtn.addEventListener('click', closeContentModal);
-            // Close modal by clicking on the overlay background
-            contentModal.addEventListener('click', (e) => {
-                if (e.target === contentModal) {
-                    closeContentModal();
-                }
-            });
-
-
-            // --- Language Toggle ---
-            const langToggleBtn = document.getElementById('lang-toggle-btn');
-            const htmlEl = document.documentElement;
-
-            function setLanguage(lang) {
-                // Update HTML attributes
-                htmlEl.lang = lang;
-                htmlEl.dir = lang === 'fa' ? 'rtl' : 'ltr';
-                
-                // Update button text
-                langToggleBtn.textContent = lang === 'fa' ? 'EN' : 'FA';
-
-                // Update all translatable elements
-                document.querySelectorAll('[data-lang]').forEach(element => {
-                    const key = element.getAttribute('data-lang');
-                    if (translations[lang] && translations[lang][key]) {
-                        element.textContent = translations[lang][key];
-                    }
-                });
-            }
-
-            // Set initial state (already 'fa' in HTML)
-            let currentLang = htmlEl.lang || 'fa';
-
-            // Add click listener
-            langToggleBtn.addEventListener('click', () => {
-                currentLang = currentLang === 'fa' ? 'en' : 'fa';
-                setLanguage(currentLang);
-            });
-        });
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
-
-
